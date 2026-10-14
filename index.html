@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="description" content="酒吧找艺人，艺人找演出。商业思路、产品与后端设计、10 张设计图、16 张低保真原型和页面职责。"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>音乐酒吧街 · 酒吧与艺人演出撮合</title>
+  <style>
+    :root{--ink:#15372e;--muted:#587168;--green:#00b993;--line:#d9e5df;--paper:#f6f9f6}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--paper);color:var(--ink);line-height:1.7}a{color:inherit;text-underline-offset:4px}header,main,footer{max-width:1120px;margin:auto;padding:26px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid var(--line)}.brand{font-weight:750;letter-spacing:.025em}.tag{font-size:13px;color:var(--muted)}.hero{padding:52px 0 34px;max-width:850px}h1{font-size:clamp(30px,4vw,50px);line-height:1.25;margin:14px 0 24px;letter-spacing:-.035em}.eyebrow{color:#087b63;font-size:13px;font-weight:700;letter-spacing:.06em}p{color:var(--muted);font-size:17px}.primary{display:inline-block;text-decoration:none;background:var(--ink);color:white;padding:13px 22px;border-radius:9px;margin:12px 12px 0 0}.secondary{display:inline-block;padding:12px 18px;border:1px solid var(--line);border-radius:9px;text-decoration:none}.flow{background:#e6f5ef;border:1px solid #cde8dc;padding:20px 24px;border-radius:12px;margin:8px 0 32px;font-weight:650;line-height:2}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:24px}.card h2{font-size:20px;margin:0 0 12px}.card p{font-size:15px}.card a{font-weight:650}.docs{margin:38px 0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.docs a{padding:16px 18px;background:white;border:1px solid var(--line);border-radius:9px;text-decoration:none;display:flex;justify-content:space-between;align-items:center}.note{font-size:14px;background:#eef2ed;border-left:3px solid #94b7a4;padding:16px 20px}.collaboration{padding:24px 0}.collaboration h2{font-size:25px}.collaboration p{max-width:800px}footer{font-size:13px;border-top:1px solid var(--line);color:var(--muted)}@media(max-width:720px){header,main,footer{padding:20px}.hero{padding-top:30px}.cards,.docs{grid-template-columns:1fr}header{align-items:flex-start}.tag{max-width:145px;text-align:right}}
+  </style>
+</head>
+<body>
+  <header><span class="brand">Music Bar Street · 音乐酒吧街</span><span class="tag">v0.1<br>项目设计资料</span></header>
+  <main>
+    <section class="hero"><div class="eyebrow">酒吧与艺人演出撮合</div><h1>酒吧找艺人，<br>艺人找演出。</h1><p>这是我想做的一款演出撮合 App。酒吧发需求或邀请艺人，双方谈好时间、费用和要求，再确认合作。现在把商业思路、产品与后端设计、原型和页面职责放出来，你可以拿去做，也可以联系我一起做。</p><a class="primary" href="prototype/index.html">看一次合作的原型 →</a><a class="secondary" href="ui/index.html">读页面职责</a><a class="secondary" href="en.html">English overview</a><a class="secondary" href="https://github.com/JiekerTime/music-bar-street/archive/refs/heads/main.zip">下载完整资料包</a></section>
+    <div class="flow">发需求或邀约 → 选人、商量条件 → 双方确认 → 演出订单 → 双方确认完成</div>
+    <section class="cards">
+      <article class="card"><h2>准备做什么</h2><p>谁来用，怎么找人，会员和服务费准备怎么试。</p><a href="docs/BUSINESS_MODEL.html">看商业思路 →</a></article>
+      <article class="card"><h2>产品与后端怎么设计</h2><p>业务流程、系统架构、数据、状态、权限、接口、媒体和部署。</p><a href="docs/README.html">读设计文档 →</a> · <a href="design/index.html">看 10 张设计图 →</a></article>
+      <article class="card"><h2>想实际试一下</h2><p>有酒吧或艺人资源，可以先跑几次合作，看看哪一步最需要工具。</p><a href="docs/ADOPTION.html">看看怎么试 →</a></article>
+    </section>
+    <div class="docs"><a href="README.html">项目说明 <span>↗</span></a><a href="docs/IMPLEMENTATION_GUIDE.html">后端实施指南 <span>↗</span></a><a href="docs/UI_MAP.html">页面职责与一期范围 <span>↗</span></a><a href="CONTRIBUTING.html">贡献与合作方式 <span>↗</span></a><a href="docs/RELEASE_PLAN.html">发布与维护说明 <span>↗</span></a><a href="LICENSING.html">开放许可 <span>↗</span></a></div>
+    <p><a href="https://www.figma.com/community/file/1692143979739836987">复制 Figma 设计文件 →</a> · <a href="https://www.producthunt.com/products/music-bar-street?launch=music-bar-street">Product Hunt 条目（10 月 15 日发布）→</a></p>
+    <div class="note">现在有设计文档、10 张设计图、16 张低保真原型和页面职责说明。业务后端还没写。公开原型重新绘制成灰色线框；现有 UI 只保存在本地。</div>
+    <section class="collaboration"><h2>拿去做，或一起做</h2><p>你可以按开源许可修改、开发和商用，不需要先联系我，也不用给我分成。想一起做，或有真实的酒吧和艺人资源，可以在 GitHub 留言，说下你能做哪部分、想先试什么。</p><a class="primary" href="https://github.com/JiekerTime/music-bar-street/issues/new/choose">联系我 →</a> <a href="CONTRIBUTING.html">查看参与方式 →</a></section>
+  </main>
+  <footer>发起人：Ruoyi / <a href="https://github.com/JiekerTime">JiekerTime</a> · 文档、原型与设计图：CC BY 4.0 · 网页源码：Apache-2.0。<p style="margin:16px 0 0"><a href="https://xinquji.com" target="_blank" rel="noopener noreferrer"><img src="https://xinquji.com/badge" alt="Featured on 新趣集" style="width:200px;height:54px;" width="200" height="54" /></a></p></footer>
+</body>
+</html>

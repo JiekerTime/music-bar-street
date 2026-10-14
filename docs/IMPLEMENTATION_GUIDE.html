@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>后端设计入口</title><meta name="description" content="Music Bar Street: design notes, diagrams, wireframes and page descriptions."><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f6f9f6;color:#173c32;font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}header,main,footer{max-width:1000px;margin:auto;padding:24px}header{border-bottom:1px solid #d9e5df;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}a{color:#087a60;text-underline-offset:4px}header a{text-decoration:none}article{background:white;border:1px solid #d9e5df;border-radius:14px;padding:32px;overflow-wrap:anywhere}h1{font-size:32px;line-height:1.3}h2{font-size:24px;margin-top:36px}p,li{color:#385d50}pre{overflow:auto;background:#edf4ef;border-radius:8px;padding:18px;font-size:13px;line-height:1.6}code{font-family:ui-monospace,SFMono-Regular,monospace}table{border-collapse:collapse;display:block;max-width:100%;overflow:auto}td,th{border:1px solid #d9e5df;padding:12px;text-align:left;vertical-align:top}th{background:#edf5ee}img{max-width:100%}footer{color:#587168;font-size:13px}.actions{margin:16px 0 26px;display:flex;gap:18px;flex-wrap:wrap}@media(max-width:650px){header,main,footer{padding:18px}article{padding:20px}h1{font-size:26px}}</style></head><body><header><a href="../index.html"><strong>Music Bar Street · 音乐酒吧街</strong></a><span><a href="../prototype/">Demo</a> · <a href="../ui/">UI</a> · <a href="https://github.com/JiekerTime/music-bar-street">GitHub</a></span></header><main><div class="actions"><a href="https://github.com/JiekerTime/music-bar-street/archive/refs/heads/main.zip">下载完整资料包</a><a href="https://github.com/JiekerTime/music-bar-street/issues/new/choose">联系作者 / 讨论合作</a></div><article><h1>后端设计入口</h1>
+<p>一期用一个模块化 Spring Boot 服务，PostgreSQL 保存业务数据，Redis 存会话、验证码和缓存，图片与视频接阿里云 OSS、VOD。PG 和 Redis 先同机部署，按实际需要再拆。</p>
+<p>这次把设计分成几份，方便对应实现和检查：</p>
+<ul>
+<li><a href="SYSTEM_DESIGN.html">系统设计</a>：模块、调用关系和编码约定。</li>
+<li><a href="DATA_MODEL.html">数据设计</a>：表、关系、唯一约束、档期与事务。</li>
+<li><a href="STATE_AND_ACCESS.html">状态与权限</a>：参与方、运营、状态转换和异常。</li>
+<li><a href="API_DESIGN.html">接口约定</a>：输入、结果、幂等、分页和错误。</li>
+<li><a href="MEDIA_AND_MESSAGES.html">媒体与消息</a>：上传、播放、审核、回调和基础聊天。</li>
+<li><a href="MEMBERSHIP_AND_FEES.html">会员与费用</a>：购买入口、权益、估算和实际收款。</li>
+<li><a href="DEPLOYMENT_AND_DELIVERY.html">部署与交付</a>：同机部署、看板、备份与开发顺序。</li>
+</ul>
+<p><a href="../design/index.html">设计图目录</a> 放业务流程、系统架构、数据关系、状态、时序、媒体、部署与页面结构；图的源文件也一起提供。</p>
+<p>原则还是：提供扩展性，避免过度设计，严格保证编码风格。先交付一次能跑通的演出合作，直播、打赏、钱包和微服务拆分往后放。</p>
+<p>当前只有设计文档、原型和设计图，没有业务后端实现。</p>
+</article></main><footer>Ruoyi / JiekerTime · Documents &amp; UI: CC BY 4.0 · HTML/CSS/JavaScript source: Apache-2.0</footer></body></html>

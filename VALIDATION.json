@@ -1,0 +1,25 @@
+{
+  "version": "0.2",
+  "status": "validated",
+  "validated_at": "2026-10-14",
+  "documents": {
+    "local_html_links_checked": 296,
+    "missing_links": 0
+  },
+  "design": {
+    "system_and_product_diagrams": 10,
+    "wireframes": 16,
+    "svg_files_valid": 29,
+    "page_descriptions": 53
+  },
+  "ui_withdrawal": {
+    "original_ui_files_in_current_public_tree": 0,
+    "embedded_ui_images_in_svg": 0,
+    "private_original_hashes_matched": 53,
+    "historical_commits_rewritten": false,
+    "release_has_clean_initial_history": true
+  },
+  "backend": "not_implemented",
+  "content_license": "CC-BY-4.0",
+  "code_license": "Apache-2.0"
+}

@@ -1,0 +1,20 @@
+sequenceDiagram
+ participant V as 酒吧
+ participant A as 艺人
+ participant API as 业务API
+ participant O as 订单模块
+ participant PG as PostgreSQL
+ A->>API: 确认条件版本 + 幂等键
+ API->>PG: BEGIN + 锁定洽谈 + 版本检查
+ API->>PG: 保存确认，读取双方确认
+ API->>O: 双方同版确认，创建订单
+ O->>PG: 订单 + 档期 + 费用估算 + 事件
+ alt 档期或名额冲突
+ PG-->>O: ROLLBACK + 409
+ O-->>API: 档期或名额冲突
+ else 成功
+ PG-->>O: COMMIT + 同一订单ID
+ O-->>API: 返回同一订单ID
+ end
+ API-->>A: 确认结果
+ API-->>V: 提交后通知，可重试

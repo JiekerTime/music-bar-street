@@ -1,0 +1,94 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>低保真原型说明</title><meta name="description" content="Music Bar Street: design notes, diagrams, wireframes and page descriptions."><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f6f9f6;color:#173c32;font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}header,main,footer{max-width:1000px;margin:auto;padding:24px}header{border-bottom:1px solid #d9e5df;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}a{color:#087a60;text-underline-offset:4px}header a{text-decoration:none}article{background:white;border:1px solid #d9e5df;border-radius:14px;padding:32px;overflow-wrap:anywhere}h1{font-size:32px;line-height:1.3}h2{font-size:24px;margin-top:36px}p,li{color:#385d50}pre{overflow:auto;background:#edf4ef;border-radius:8px;padding:18px;font-size:13px;line-height:1.6}code{font-family:ui-monospace,SFMono-Regular,monospace}table{border-collapse:collapse;display:block;max-width:100%;overflow:auto}td,th{border:1px solid #d9e5df;padding:12px;text-align:left;vertical-align:top}th{background:#edf5ee}img{max-width:100%}footer{color:#587168;font-size:13px}.actions{margin:16px 0 26px;display:flex;gap:18px;flex-wrap:wrap}@media(max-width:650px){header,main,footer{padding:18px}article{padding:20px}h1{font-size:26px}}</style></head><body><header><a href="../index.html"><strong>Music Bar Street · 音乐酒吧街</strong></a><span><a href="../prototype/">Demo</a> · <a href="../ui/">UI</a> · <a href="https://github.com/JiekerTime/music-bar-street">GitHub</a></span></header><main><div class="actions"><a href="https://github.com/JiekerTime/music-bar-street/archive/refs/heads/main.zip">下载完整资料包</a><a href="https://github.com/JiekerTime/music-bar-street/issues/new/choose">联系作者 / 讨论合作</a></div><article><h1>低保真原型说明</h1>
+<p><a href="../prototype/index.html">原型图目录</a> 提供 16 张重新绘制的灰色线框图，全部使用 SVG 图形和文字，没有嵌入原有 UI 图片。图上描述页面结构、操作、权限和异常状态；布局是实现前的建议，可以调整。</p>
+<table>
+<thead>
+<tr>
+<th>原型</th>
+<th>主要职责</th>
+<th>下一步</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="../prototype/01-sign-in.svg">登录与身份选择</a></td>
+<td>手机号验证码登录后再选择身份。</td>
+<td>入驻资料</td>
+</tr>
+<tr>
+<td><a href="../prototype/02-venue-onboarding.svg">酒吧入驻</a></td>
+<td>资质上传使用短时授权。</td>
+<td>酒吧主页 / 发布需求</td>
+</tr>
+<tr>
+<td><a href="../prototype/03-artist-onboarding.svg">艺人入驻</a></td>
+<td>报价同时显示单位和币种。</td>
+<td>艺人主页 / 演出机会</td>
+</tr>
+<tr>
+<td><a href="../prototype/04-artist-profile.svg">艺人主页</a></td>
+<td>只显示审核通过的公开资料。</td>
+<td>发起邀约</td>
+</tr>
+<tr>
+<td><a href="../prototype/05-gig-list.svg">演出机会列表</a></td>
+<td>有效需求分页展示。</td>
+<td>需求详情</td>
+</tr>
+<tr>
+<td><a href="../prototype/06-publish-gig.svg">发布演出需求</a></td>
+<td>结束时间晚于开始时间；支持跨午夜。</td>
+<td>需求管理 / 候选人</td>
+</tr>
+<tr>
+<td><a href="../prototype/07-gig-detail.svg">需求详情与投递</a></td>
+<td>艺人不能投递自己的酒吧需求。</td>
+<td>候选人 / 洽谈</td>
+</tr>
+<tr>
+<td><a href="../prototype/08-candidates.svg">候选人管理</a></td>
+<td>选择一人开始洽谈，不自动确认订单。</td>
+<td>消息 / 合作条件</td>
+</tr>
+<tr>
+<td><a href="../prototype/09-invitation.svg">发出与回应邀约</a></td>
+<td>只有指定艺人可以回应。</td>
+<td>消息 / 合作条件</td>
+</tr>
+<tr>
+<td><a href="../prototype/10-messages.svg">私信与通知</a></td>
+<td>消息保存在服务端，重连能补历史。</td>
+<td>合作条件</td>
+</tr>
+<tr>
+<td><a href="../prototype/11-terms.svg">商量最终合作条件</a></td>
+<td>预算与最终费用分别记录。</td>
+<td>双方确认</td>
+</tr>
+<tr>
+<td><a href="../prototype/12-confirm.svg">双方确认合作</a></td>
+<td>只允许确认当前版本。</td>
+<td>演出订单</td>
+</tr>
+<tr>
+<td><a href="../prototype/13-order.svg">订单详情与变更</a></td>
+<td>普通编辑不覆盖订单历史快照。</td>
+<td>完成确认 / 变更回应</td>
+</tr>
+<tr>
+<td><a href="../prototype/14-completion.svg">演出完成与争议</a></td>
+<td>演出结束后双方分别确认。</td>
+<td>合作记录</td>
+</tr>
+<tr>
+<td><a href="../prototype/15-membership.svg">商家会员</a></td>
+<td>一期先说明权益、记录购买意向。</td>
+<td>会员权益 / 需求发布</td>
+</tr>
+<tr>
+<td><a href="../prototype/16-operations.svg">只读运营看板</a></td>
+<td>一期不拆独立管理服务。</td>
+<td>运营审核与异常处理</td>
+</tr>
+</tbody></table>
+<p>页面交互依照<a href="PRODUCT_SPEC.html">产品流程</a>、<a href="STATE_AND_ACCESS.html">状态与权限</a>和<a href="API_DESIGN.html">接口约定</a>。接受邀约不会生成订单；双方确认同一版本才成单；完成、取消、变更和争议保留独立记录。会员收费前需定价格和支付规则，运营看板一期只读。</p>
+<p>原有 UI 仅保存在本地，当前公开文件与下载包不包含原图或嵌入原图的参考板。</p>
+</article></main><footer>Ruoyi / JiekerTime · Documents &amp; UI: CC BY 4.0 · HTML/CSS/JavaScript source: Apache-2.0</footer></body></html>

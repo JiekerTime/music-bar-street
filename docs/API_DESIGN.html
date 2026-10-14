@@ -1,0 +1,362 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>接口约定</title><meta name="description" content="Music Bar Street: design notes, diagrams, wireframes and page descriptions."><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f6f9f6;color:#173c32;font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}header,main,footer{max-width:1000px;margin:auto;padding:24px}header{border-bottom:1px solid #d9e5df;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}a{color:#087a60;text-underline-offset:4px}header a{text-decoration:none}article{background:white;border:1px solid #d9e5df;border-radius:14px;padding:32px;overflow-wrap:anywhere}h1{font-size:32px;line-height:1.3}h2{font-size:24px;margin-top:36px}p,li{color:#385d50}pre{overflow:auto;background:#edf4ef;border-radius:8px;padding:18px;font-size:13px;line-height:1.6}code{font-family:ui-monospace,SFMono-Regular,monospace}table{border-collapse:collapse;display:block;max-width:100%;overflow:auto}td,th{border:1px solid #d9e5df;padding:12px;text-align:left;vertical-align:top}th{background:#edf5ee}img{max-width:100%}footer{color:#587168;font-size:13px}.actions{margin:16px 0 26px;display:flex;gap:18px;flex-wrap:wrap}@media(max-width:650px){header,main,footer{padding:18px}article{padding:20px}h1{font-size:26px}}</style></head><body><header><a href="../index.html"><strong>Music Bar Street · 音乐酒吧街</strong></a><span><a href="../prototype/">Demo</a> · <a href="../ui/">UI</a> · <a href="https://github.com/JiekerTime/music-bar-street">GitHub</a></span></header><main><div class="actions"><a href="https://github.com/JiekerTime/music-bar-street/archive/refs/heads/main.zip">下载完整资料包</a><a href="https://github.com/JiekerTime/music-bar-street/issues/new/choose">联系作者 / 讨论合作</a></div><article><h1>接口约定</h1>
+<p>以下是一期业务 API 的设计，不是现成的服务地址。统一前缀 <code>/api/v1</code>，JSON 用 camelCase。公开主键为 UUID，金额是整数分，日期时间用带偏移的 RFC 3339，并保留 timezone。</p>
+<h2>通用规则</h2>
+<p>需要登录的请求带 <code>Authorization: Bearer &lt;session&gt;</code>，会话在服务端核对。公开浏览接口只返回已公开且审核通过的数据。操作者 ID 从会话取得，不能让请求体替用户指定发起方。</p>
+<p>成功结果含 data 与 requestId；失败含 error.code、error.message、error.details 与 requestId。列表使用 cursor、limit，默认 20、最大 100，返回 nextCursor，排序固定并带 ID 作为末级排序。</p>
+<p>创建投递、邀约、确认、消息、订单动作和会员购买意向带 <code>Idempotency-Key</code>。服务端按账号、操作、幂等键和请求摘要保存结果；同键同内容返回原结果，同键不同内容返回 409。幂等记录保留时间由实现配置，至少覆盖客户端重试周期；唯一约束仍作为最终防线。</p>
+<p>修改资料和需求携带 expectedVersion。修改合作条件创建新版本，不能覆盖旧版本。确认携带 expectedTermsVersion；订单变更携带 expectedOrderVersion。</p>
+<h2>登录、资料和审核</h2>
+<table>
+<thead>
+<tr>
+<th>方法与路径</th>
+<th>输入</th>
+<th>结果和规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST /auth/challenges</td>
+<td>phone, purpose</td>
+<td>challengeId, expiresAt；频率限制，不回显验证码</td>
+</tr>
+<tr>
+<td>POST /auth/sessions</td>
+<td>challengeId, code</td>
+<td>session, expiresAt, account；短信服务商待选</td>
+</tr>
+<tr>
+<td>DELETE /auth/session</td>
+<td>无</td>
+<td>当前会话失效</td>
+</tr>
+<tr>
+<td>GET /me</td>
+<td>无</td>
+<td>自己的身份、账号和资料状态</td>
+</tr>
+<tr>
+<td>PUT /me/venue</td>
+<td>expectedVersion, name, city, address, description, licenseMediaId</td>
+<td>自己的酒吧资料；私有证件不回到公开接口</td>
+</tr>
+<tr>
+<td>PUT /me/artist</td>
+<td>expectedVersion, name, city, styles, introduction, rateUnit, rateMinor, mediaIds</td>
+<td>自己的艺人资料；媒体用途和所有者核对</td>
+</tr>
+<tr>
+<td>POST /me/venue/review</td>
+<td>expectedVersion</td>
+<td>提交酒吧审核</td>
+</tr>
+<tr>
+<td>POST /me/artist/review</td>
+<td>expectedVersion</td>
+<td>提交艺人审核</td>
+</tr>
+<tr>
+<td>GET /artists</td>
+<td>city, style, cursor, limit</td>
+<td>公开艺人列表；不返回手机号和私有资料</td>
+</tr>
+<tr>
+<td>GET /artists/{id}</td>
+<td>无</td>
+<td>公开艺人主页和已可用作品</td>
+</tr>
+<tr>
+<td>GET /venues/{id}</td>
+<td>无</td>
+<td>公开酒吧主页</td>
+</tr>
+<tr>
+<td>GET /me/artist/calendar</td>
+<td>from, to</td>
+<td>本人档期说明与订单占用</td>
+</tr>
+<tr>
+<td>POST /me/artist/calendar</td>
+<td>startsAt, endsAt, kind, note</td>
+<td>增加本人档期说明；不覆盖订单占用</td>
+</tr>
+<tr>
+<td>DELETE /me/artist/calendar/{id}</td>
+<td>expectedVersion</td>
+<td>仅删除本人手工录入的说明</td>
+</tr>
+</tbody></table>
+<h2>需求、投递和邀约</h2>
+<table>
+<thead>
+<tr>
+<th>方法与路径</th>
+<th>输入</th>
+<th>结果和规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET /demands</td>
+<td>city, style, from, to, cursor, limit</td>
+<td>OPEN 且可公开的需求</td>
+</tr>
+<tr>
+<td>POST /demands</td>
+<td>startsAt, endsAt, timezone, budgetMinor, artistType, requirements</td>
+<td>本人酒吧的需求；审核、会员额度和时间检查</td>
+</tr>
+<tr>
+<td>PATCH /demands/{id}</td>
+<td>expectedVersion, 可修改字段</td>
+<td>本人且仍可修改的需求；不能改已确认订单</td>
+</tr>
+<tr>
+<td>POST /demands/{id}/close</td>
+<td>expectedVersion, reason</td>
+<td>关闭本人需求，停止新投递</td>
+</tr>
+<tr>
+<td>POST /demands/{id}/applications</td>
+<td>message</td>
+<td>当前艺人的投递；已有记录时返回同一记录</td>
+</tr>
+<tr>
+<td>GET /demands/{id}/applications</td>
+<td>cursor, limit</td>
+<td>需求所属酒吧可查看投递</td>
+</tr>
+<tr>
+<td>POST /applications/{id}/withdraw</td>
+<td>reason</td>
+<td>当前投递艺人撤回</td>
+</tr>
+<tr>
+<td>POST /applications/{id}/select</td>
+<td>无</td>
+<td>需求所属酒吧建立或返回洽谈</td>
+</tr>
+<tr>
+<td>POST /applications/{id}/reject</td>
+<td>reason</td>
+<td>需求所属酒吧拒绝投递</td>
+</tr>
+<tr>
+<td>POST /invitations</td>
+<td>artistId, proposedTerms</td>
+<td>本人酒吧发起邀约；邀请不是订单</td>
+</tr>
+<tr>
+<td>GET /me/invitations</td>
+<td>direction, cursor, limit</td>
+<td>自己发出或收到的邀约</td>
+</tr>
+<tr>
+<td>POST /invitations/{id}/respond</td>
+<td>decision: ACCEPT / REJECT, message</td>
+<td>收件艺人回应；接受时建立洽谈</td>
+</tr>
+<tr>
+<td>POST /invitations/{id}/withdraw</td>
+<td>reason</td>
+<td>发件酒吧撤回未完成邀约</td>
+</tr>
+</tbody></table>
+<h2>条件和订单</h2>
+<table>
+<thead>
+<tr>
+<th>方法与路径</th>
+<th>输入</th>
+<th>结果和规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET /negotiations/{id}</td>
+<td>无</td>
+<td>参与方可读当前条件、确认情况、消息会话</td>
+</tr>
+<tr>
+<td>POST /negotiations/{id}/agreement-versions</td>
+<td>expectedTermsVersion, terms</td>
+<td>参与方提新条件；清空当前确认，旧版本保留</td>
+</tr>
+<tr>
+<td>POST /negotiations/{id}/confirm</td>
+<td>expectedTermsVersion</td>
+<td>记录本人确认；第二方确认时事务内创建订单并占用档期</td>
+</tr>
+<tr>
+<td>POST /negotiations/{id}/cancel</td>
+<td>reason</td>
+<td>订单前终止洽谈并留记录</td>
+</tr>
+<tr>
+<td>GET /me/orders</td>
+<td>status, cursor, limit</td>
+<td>自己参与的订单</td>
+</tr>
+<tr>
+<td>GET /orders/{id}</td>
+<td>无</td>
+<td>参与方订单快照、状态和历史事件</td>
+</tr>
+<tr>
+<td>POST /orders/{id}/complete</td>
+<td>expectedOrderVersion</td>
+<td>演出结束后记录本人完成；另一方确认后完成</td>
+</tr>
+<tr>
+<td>POST /orders/{id}/cancellation-requests</td>
+<td>expectedOrderVersion, reason</td>
+<td>发起取消请求；暂不释放档期</td>
+</tr>
+<tr>
+<td>POST /orders/{id}/cancellation-requests/{requestId}/respond</td>
+<td>decision, reason</td>
+<td>另一方回应；同意后取消，分歧进入争议</td>
+</tr>
+<tr>
+<td>POST /orders/{id}/change-requests</td>
+<td>expectedOrderVersion, terms, reason</td>
+<td>提出改期或改价，不直接改订单</td>
+</tr>
+<tr>
+<td>POST /orders/{id}/change-requests/{requestId}/respond</td>
+<td>decision</td>
+<td>另一方同意后事务内替换当前版本与档期，保留旧记录</td>
+</tr>
+<tr>
+<td>POST /orders/{id}/disputes</td>
+<td>expectedOrderVersion, reason</td>
+<td>记录争议，不自动扣款或裁定</td>
+</tr>
+</tbody></table>
+<p>取消、变更和争议的子记录可使用 order_events 保存提案和回应，具体表拆分可在实现时确定。每个提案有独立 UUID，只允许回应尚待回应的同一提案；过期订单版本不能覆盖新结果。</p>
+<p>一次确认请求：</p>
+<pre><code class="language-json">{&quot;expectedTermsVersion&quot;: 3}
+</code></pre>
+<p>一方已确认、另一方还没确认：</p>
+<pre><code class="language-json">{
+  &quot;data&quot;: {
+    &quot;termsVersion&quot;: 3,
+    &quot;confirmations&quot;: {&quot;venue&quot;: true, &quot;artist&quot;: false},
+    &quot;order&quot;: null
+  },
+  &quot;requestId&quot;: &quot;example-request-1&quot;
+}
+</code></pre>
+<p>双方确认后返回同一份订单 ID。档期冲突返回 409 ARTIST_UNAVAILABLE，整次事务回滚。</p>
+<p>一份条件示例：</p>
+<pre><code class="language-json">{
+  &quot;startsAt&quot;: &quot;2026-11-07T23:00:00+08:00&quot;,
+  &quot;endsAt&quot;: &quot;2026-11-08T01:00:00+08:00&quot;,
+  &quot;timezone&quot;: &quot;Asia/Shanghai&quot;,
+  &quot;priceUnit&quot;: &quot;PER_GIG&quot;,
+  &quot;quantity&quot;: &quot;1&quot;,
+  &quot;unitPriceMinor&quot;: 120000,
+  &quot;totalMinor&quot;: 120000,
+  &quot;currency&quot;: &quot;CNY&quot;,
+  &quot;requirements&quot;: &quot;双人演出，场地提供音响；彩排时间另行确认。&quot;,
+  &quot;cancellationTerms&quot;: &quot;取消与改期先协商，结果保存在订单记录中。&quot;
+}
+</code></pre>
+<p>quantity 是最多两位小数的正十进制字符串；服务端用十进制计算 unitPriceMinor × quantity，四舍五入到分，核对 totalMinor。PER_GIG 的 quantity 按场数，PER_HOUR 按已约定收费小时数，不能在 UI 里静默切单位。</p>
+<h2>媒体、消息、会员与运营</h2>
+<table>
+<thead>
+<tr>
+<th>方法与路径</th>
+<th>输入</th>
+<th>结果和规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST /media/upload-intents</td>
+<td>purpose, filename, contentType, sizeBytes</td>
+<td>mediaId, 短期上传授权；客户端不传目标 Bucket</td>
+</tr>
+<tr>
+<td>POST /media/{id}/upload-complete</td>
+<td>无</td>
+<td>核对对象后更新本人资源上传状态</td>
+</tr>
+<tr>
+<td>GET /media/{id}/access</td>
+<td>无</td>
+<td>根据公开状态或本人/审核权限返回短期地址或播放授权</td>
+</tr>
+<tr>
+<td>POST /callbacks/media/{provider}</td>
+<td>供应商事件</td>
+<td>核对来源与事件 ID，重复处理返回原结果</td>
+</tr>
+<tr>
+<td>GET /conversations/{id}/messages</td>
+<td>cursor, limit</td>
+<td>仅参与方，按游标读取</td>
+</tr>
+<tr>
+<td>POST /conversations/{id}/messages</td>
+<td>clientMessageId, body</td>
+<td>仅参与方发文字消息，长度 1–2000 字符</td>
+</tr>
+<tr>
+<td>PUT /conversations/{id}/read-cursor</td>
+<td>lastMessageId</td>
+<td>只更新自己读到的会话消息</td>
+</tr>
+<tr>
+<td>GET /membership/plans</td>
+<td>无</td>
+<td>套餐、权益及当前购买方式</td>
+</tr>
+<tr>
+<td>POST /membership/purchase-intents</td>
+<td>planId</td>
+<td>未接支付时登记意向；不能假装开通会员</td>
+</tr>
+<tr>
+<td>GET /me/membership</td>
+<td>无</td>
+<td>本人酒吧的权益和有效期</td>
+</tr>
+<tr>
+<td>POST /membership/orders</td>
+<td>planId</td>
+<td>支付接通后才启用，服务端锁定价格快照</td>
+</tr>
+<tr>
+<td>POST /callbacks/payments/{provider}</td>
+<td>供应商支付事件</td>
+<td>启用后核实支付事实，一次开通</td>
+</tr>
+<tr>
+<td>GET /ops/reviews</td>
+<td>type, cursor, limit</td>
+<td>审核权限；不对普通账号开放</td>
+</tr>
+<tr>
+<td>POST /ops/reviews/{id}/decisions</td>
+<td>decision, reason</td>
+<td>审核权限，保存审计</td>
+</tr>
+<tr>
+<td>POST /ops/resources/{type}/{id}/suspend</td>
+<td>reason</td>
+<td>受控下架，不删除历史订单</td>
+</tr>
+<tr>
+<td>GET /ops/dashboard</td>
+<td>from, to</td>
+<td>只读权限，明确统计口径</td>
+</tr>
+<tr>
+<td>POST /ops/orders/{id}/dispute-decisions</td>
+<td>expectedOrderVersion, decision, reason</td>
+<td>争议处理权限；保存裁定记录，不代替支付操作</td>
+</tr>
+</tbody></table>
+<p>媒体和支付回调不靠普通登录会话授权，要按供应商验证方式核对。运营身份由受控配置或授权记录管理，客户端不能注册成为运营。</p>
+<h2>HTTP 与业务错误</h2>
+<p>400 输入不合法；401 未登录或会话失效；403 无权限；404 资源不存在或不可见；409 版本、档期、名额或幂等冲突；422 当前状态不允许操作；429 频率限制；503 外部服务暂不可用。</p>
+<p>服务端错误不回传堆栈和凭证。上传授权或支付服务失败要能重新发起同一业务记录，不产生一排重复订单。当前只有接口设计，还没有实现这些 HTTP 接口。</p>
+</article></main><footer>Ruoyi / JiekerTime · Documents &amp; UI: CC BY 4.0 · HTML/CSS/JavaScript source: Apache-2.0</footer></body></html>

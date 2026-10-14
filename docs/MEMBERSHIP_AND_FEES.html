@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>会员和费用</title><meta name="description" content="Music Bar Street: design notes, diagrams, wireframes and page descriptions."><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f6f9f6;color:#173c32;font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}header,main,footer{max-width:1000px;margin:auto;padding:24px}header{border-bottom:1px solid #d9e5df;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}a{color:#087a60;text-underline-offset:4px}header a{text-decoration:none}article{background:white;border:1px solid #d9e5df;border-radius:14px;padding:32px;overflow-wrap:anywhere}h1{font-size:32px;line-height:1.3}h2{font-size:24px;margin-top:36px}p,li{color:#385d50}pre{overflow:auto;background:#edf4ef;border-radius:8px;padding:18px;font-size:13px;line-height:1.6}code{font-family:ui-monospace,SFMono-Regular,monospace}table{border-collapse:collapse;display:block;max-width:100%;overflow:auto}td,th{border:1px solid #d9e5df;padding:12px;text-align:left;vertical-align:top}th{background:#edf5ee}img{max-width:100%}footer{color:#587168;font-size:13px}.actions{margin:16px 0 26px;display:flex;gap:18px;flex-wrap:wrap}@media(max-width:650px){header,main,footer{padding:18px}article{padding:20px}h1{font-size:26px}}</style></head><body><header><a href="../index.html"><strong>Music Bar Street · 音乐酒吧街</strong></a><span><a href="../prototype/">Demo</a> · <a href="../ui/">UI</a> · <a href="https://github.com/JiekerTime/music-bar-street">GitHub</a></span></header><main><div class="actions"><a href="https://github.com/JiekerTime/music-bar-street/archive/refs/heads/main.zip">下载完整资料包</a><a href="https://github.com/JiekerTime/music-bar-street/issues/new/choose">联系作者 / 讨论合作</a></div><article><h1>会员和费用</h1>
+<p>这里把三个不同的事情分开：演出费由谁结算，平台服务费怎样记账，商家会员怎样生效。价格和收费规则还没确定，当前没有真实收款接口。</p>
+<h2>演出费</h2>
+<p>第一版让酒吧与艺人自行结算。订单保存双方确认的金额、计价方式和结算约定，可以补充结算说明，但点击“演出完成”不能被当作资金到账。</p>
+<p>以后如果要做代收、分账或退款，需要另外设计资金账本与支付流程。本版不实现这些。</p>
+<h2>平台服务费</h2>
+<p>原想法是按演出金额算 1%。每笔订单保存计算基数、比例和预计金额，比例变更不影响旧订单。</p>
+<p>以整数分计算，rateBps=100 表示 1%，四舍五入到分。fee_records 分别保存 estimatedMinor、receivableMinor 和 receivedMinor。何时变成应收、向哪一方收，需要先确定；订单完成只记录演出结果，不自动记实收。</p>
+<p>取消订单后标记原估算失效，保留历史记录。涉及取消费时按已经确认的条件另记，不能直接拿原演出金额当应收。</p>
+<h2>商家会员</h2>
+<p>最初的权益包括推荐展示、更多需求发布额度、查看更多艺人资料。具体价格、额度和哪些资料开放还要确认。手机号、证件和私聊不因付费变成公开资料。</p>
+<p>会员模块保存套餐、购买意向、权益快照和有效期。价格、期限与权益变化只影响新购买。重复支付回调只能开通一次，客户端支付成功页面不能作为开通依据。</p>
+<p>正式购买流程是：选择套餐 → 创建待支付订单 → 跳转支付服务 → 服务端核实支付结果 → 开通权益 → 到期失效。退款后怎样处理剩余权益需要明确规则，再接真实支付。</p>
+<p>在支付服务商和规则没定之前，入口显示说明和“登记购买意向”，不能做一个点击就假装付费成功的按钮。内部测试可以由授权运营人员开通测试权益，必须标明测试、不记成实收，并保留操作记录。</p>
+<p>权益检查集中在会员模块：发需求时查额度，推荐展示带标识，读取资料时仍执行资料权限。会员不是绕过审核或订单确认的入口。</p>
+</article></main><footer>Ruoyi / JiekerTime · Documents &amp; UI: CC BY 4.0 · HTML/CSS/JavaScript source: Apache-2.0</footer></body></html>

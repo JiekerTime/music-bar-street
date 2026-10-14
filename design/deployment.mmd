@@ -1,0 +1,12 @@
+flowchart TD
+ C[客户端] --> HTTPS[HTTPS 业务入口]
+ subgraph Host[一期项目主机]
+ HTTPS --> App[Spring Boot 业务应用]
+ App --> PG[(PostgreSQL)]
+ App --> Redis[(Redis)]
+ App --> Ops[受控运营与只读看板]
+ end
+ App --> OSS[阿里云 OSS]
+ App --> VOD[阿里云 VOD]
+ PG --> Backup[主机外备份与恢复验证]
+ App --> Logs[日志与指标]

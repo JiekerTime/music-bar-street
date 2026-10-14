@@ -1,0 +1,9 @@
+flowchart TD
+ Login[登录、身份、资料与审核] --> Venue[酒吧：发需求、选艺人]
+ Login --> Artist[艺人：作品、档期、投递与邀约]
+ Venue --> Talk[基础消息与条件确认]
+ Artist --> Talk
+ Talk --> Order[订单、完成、取消、变更和争议]
+ Venue --> Member[会员说明、意向与权益]
+ Order --> Ops[运营与只读看板]
+ Later[后续：直播、打赏、钱包、提现]

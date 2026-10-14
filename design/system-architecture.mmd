@@ -1,0 +1,14 @@
+flowchart TD
+ App[酒吧与艺人 App] --> API[业务 API：认证、权限、版本检查]
+ subgraph Service[一个 Spring Boot 服务]
+ API --> Profile[账号、资料与审核]
+ API --> Matching[需求、投递、邀约、条件与订单]
+ API --> Extras[消息、会员与只读看板]
+ Profile --> Media[媒体模块]
+ end
+ Profile --> PG[(PostgreSQL)]
+ Matching --> PG
+ Extras --> PG
+ API --> Redis[(Redis)]
+ Media --> OSS[阿里云 OSS]
+ Media --> VOD[阿里云 VOD]

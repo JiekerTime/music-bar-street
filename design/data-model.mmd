@@ -1,0 +1,19 @@
+erDiagram
+ accounts ||--o| venue_profiles : owns
+ accounts ||--o| artist_profiles : owns
+ venue_profiles ||--o{ demands : publishes
+ demands ||--o{ applications : receives
+ artist_profiles ||--o{ applications : applies
+ venue_profiles ||--o{ invitations : sends
+ artist_profiles ||--o{ invitations : receives
+ applications ||--o| negotiations : selected
+ invitations ||--o| negotiations : accepted
+ negotiations ||--o{ agreement_versions : revises
+ agreement_versions ||--o{ agreement_confirmations : confirms
+ negotiations ||--o| performance_orders : creates
+ agreement_versions ||--o| performance_orders : snapshots
+ negotiations ||--|| conversations : talks
+ conversations ||--o{ messages : contains
+ performance_orders ||--|| artist_reservations : reserves
+ performance_orders ||--o{ order_events : records
+ performance_orders ||--|| fee_records : estimates
